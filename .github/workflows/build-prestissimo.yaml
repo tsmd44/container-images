@@ -30,4 +30,4 @@ jobs:
           --destination tsmd44/prestissimo:${TAG} \
           --destination tsmd44/prestissimo:latest \
           --cache=true \
-          --cache-repo tsmd44/prestissimo-cache"
+          --cache-repo tsmd44/prestissimo-cache
