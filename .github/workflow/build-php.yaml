@@ -1,0 +1,41 @@
+name: php
+on:
+  push:
+    branches:
+    - master
+    paths:
+    - 'php/Dockerfile'
+    - '.github/workflows/build-php.yaml'
+jobs:
+  build_and_push:
+    name: Build and Push Image
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        php: [7.2, 7.3, 7.4]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: azure/docker-login@v1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+    - name: Build and Push Image
+      env:
+        PHP_VERSION: ${{ matrix.php }}-fpm-alpine3.11
+      working-directory: ./php
+      run: |-
+        CMD="docker run \
+          -v `pwd`/php:/workspace \
+          -v ${DOCKER_CONFIG}/config.json:/kaniko/.docker/config.json:ro \
+          gcr.io/kaniko-project/executor:latest \
+          --dockerfile Dockerfile \
+          --context dir:///workspace/ \
+          --destination tsmd44/php:${{ matrix.php }} \
+          --build-arg PHP_VERSION=${PHP_VERSION} \
+          --cache=true \
+          --cache-repo tsmd44/php-cache"
+        if [[ ${{ matrix.php }} = "7.4" ]]; then \
+          $CMD --destination tsmd44/php:latest; \
+        else \
+          $CMD; \
+        fi
