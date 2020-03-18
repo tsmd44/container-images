@@ -22,7 +22,7 @@ jobs:
       working-directory: ./prestissimo
       run: |-
         docker run \
-          -v `pwd`/php:/workspace \
+          -v `pwd`:/workspace \
           -v ${DOCKER_CONFIG}/config.json:/kaniko/.docker/config.json:ro \
           gcr.io/kaniko-project/executor:latest \
           --dockerfile Dockerfile \
