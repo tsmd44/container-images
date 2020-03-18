@@ -1,7 +1,7 @@
-ARG PHP_VERSION=7.2-fpm-alpine3.11
-FROM php:${PHP_VERSION}
+ARG IMAGE_TAG=7.4-fpm-alpine3.11
+FROM php:${IMAGE_TAG}
 
-ARG PHP_VERSION
+ARG IMAGE_TAG
 
 RUN set -xe && \
     apk add --no-cache --repository http://dl-3.alpinelinux.org/alpine/v3.11/main/ \
@@ -25,7 +25,7 @@ RUN set -xe && \
     pecl install apcu_bc-1.0.5 && \
     docker-php-ext-configure \
       intl && \
-    if [ "$PHP_VERSION" = "7.4-fpm-alpine3.11" ]; then \
+    if [ "$IMAGE_TAG" = "7.4-fpm-alpine3.11" ]; then \
       docker-php-ext-configure gd --with-jpeg=/usr/include/; \
     else \
       docker-php-ext-configure gd --with-png-dir=/usr/include/ --with-jpeg-dir=/usr/include/; \

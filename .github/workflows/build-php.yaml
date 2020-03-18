@@ -21,7 +21,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
     - name: Build and Push Image
       env:
-        PHP_VERSION: ${{ matrix.php }}-fpm-alpine3.11
+        IMAGE_TAG: ${{ matrix.php }}-fpm-alpine3.11
       working-directory: ./php
       run: |-
         CMD="docker run \
@@ -31,7 +31,7 @@ jobs:
           --dockerfile Dockerfile \
           --context dir:///workspace/ \
           --destination tsmd44/php:${{ matrix.php }} \
-          --build-arg PHP_VERSION=${PHP_VERSION} \
+          --build-arg IMAGE_TAG="${IMAGE_TAG}" \
           --cache=true \
           --cache-repo tsmd44/php-cache"
         if [[ ${{ matrix.php }} = "7.4" ]]; then \
